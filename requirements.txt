@@ -1,0 +1,7 @@
+asyncio>=4.0.0,
+dotenv>=0.9.9,
+fastmcp>=4.1.4,
+langchain-openai>=1.7.3,
+langchain[mcp]>=1.4.7,
+langchain-ollama>=1.1.0,
+uuid>=1.30,
