@@ -1,5 +1,8 @@
 import sqlite3
 from pathlib import Path
+from typing import Literal
+
+Status = Literal["TO-DO", "IN-PROGRESS", "DONE"]
 
 project_root = Path(__file__).resolve().parents[2]
 data_dir = project_root / "data"
@@ -18,7 +21,8 @@ def init_db() -> None:
                 title TEXT NOT NULL,
                 description TEXT NOT NULL,
                 priority TEXT NOT NULL DEFAULT 'medium',
-                status TEXT NOT NULL DEFAULT 'todo'
+                status TEXT NOT NULL DEFAULT 'TO-DO'
+                    CHECK (status IN ('TO-DO', 'IN-PROGRESS', 'DONE'))
             )
         """)
 
@@ -102,8 +106,13 @@ if __name__ == "__main__":
 
     task_id = str(uuid.uuid4())
     save_task({"task_id": task_id, "title": "demo", "description": "demo task",
-               "priority": "medium", "status": "todo"})
+               "priority": "medium", "status": "TO-DO"})
 
-    assert update_task_status_in_db(task_id, "done")["status"] == "done"
-    assert "error" in update_task_status_in_db(str(uuid.uuid4()), "done")
+    assert update_task_status_in_db(task_id, "DONE")["status"] == "DONE"
+    assert "error" in update_task_status_in_db(str(uuid.uuid4()), "DONE")
+    try:
+        update_task_status_in_db(task_id, "todo")
+        raise AssertionError("bad status accepted")
+    except sqlite3.IntegrityError:
+        pass
     print("ok")

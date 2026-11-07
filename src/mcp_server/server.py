@@ -1,9 +1,9 @@
-from typing import Literal
 from uuid import uuid4
 
 from fastmcp import FastMCP
 
 from src.mcp_server.database import (
+    Status,
     get_all_tasks,
     save_task,
     update_task_status_in_db,
@@ -20,7 +20,7 @@ def create_task(title:str, priority:str="medium", description:str="") -> dict:
     the new todo task to be done later
     """
     task_id = str(uuid4())
-    status = "todo"
+    status = "TO-DO"
 
     task =  {"task_id":task_id, "title":title, "description":description, "status": status, "priority": priority}
     tasks.append(task)
@@ -36,7 +36,7 @@ def list_tasks() -> list[dict]:
     return get_all_tasks()
 
 @mcp.tool(name="update_task_status", description="This tool will update a specific task status based on its ID")
-def update_task_status(task_id:str, status:Literal["todo", "in_progress", "done"]) -> dict:
+def update_task_status(task_id:str, status:Status) -> dict:
     """
     this function will update the status of a specific task based on its ID
     """

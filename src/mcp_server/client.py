@@ -37,7 +37,7 @@ async def update_task_status_from_mcp():
             "update_task_status",
             {
                 "task_id": "9a4a29bc-7b88-458c-b71c-cde3bd8d4b10", 
-                "status": "in_progress"
+                "status": "IN-PROGRESS"
             }
         )
         print(result.data)
